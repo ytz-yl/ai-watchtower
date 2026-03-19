@@ -1,0 +1,6 @@
+{
+  "id": "g006", "term": "Alignment", "termCn": "AI对齐",
+  "definition": "AI alignment is the field of ensuring AI systems act in accordance with human intentions and values. Key approaches include RLHF, Constitutional AI, and safety constraints. Misaligned AI can pursue goals in unintended and potentially harmful ways.",
+  "definitionCn": "AI对齐是确保人工智能系统行为符合人类意图和价值观的研究领域。主要方法包括RLHF、宪法AI和安全约束。未对齐的AI可能以非预期和潜在有害的方式追求目标。",
+  "tags": ["Safety", "Ethics", "LLM"], "updated": "2026-03-19"
+}
