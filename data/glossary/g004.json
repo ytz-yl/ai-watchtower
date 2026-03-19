@@ -1,0 +1,6 @@
+{
+  "id": "g004", "term": "LoRA", "termCn": "低秩自适应",
+  "definition": "Low-Rank Adaptation (LoRA) is a parameter-efficient fine-tuning technique that adds small trainable rank-decomposition matrices to existing frozen model weights. This enables fine-tuning massive models on consumer GPUs with as little as 1-5% of trainable parameters.",
+  "definitionCn": "低秩自适应（LoRA）是一种参数高效微调技术，通过向冻结的模型权重添加小型可训练的低秩分解矩阵实现。这使得在消费级GPU上用仅1-5%的可训练参数即可微调超大规模模型。",
+  "tags": ["Fine-tuning", "Efficiency", "LLM"], "updated": "2026-03-19"
+}

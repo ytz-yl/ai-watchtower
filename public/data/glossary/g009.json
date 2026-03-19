@@ -1,0 +1,6 @@
+{
+  "id": "g009", "term": "Chain-of-Thought (CoT)", "termCn": "思维链",
+  "definition": "Chain-of-Thought prompting encourages an LLM to explicitly verbalize its intermediate reasoning steps before giving a final answer. This significantly improves performance on complex multi-step reasoning tasks like math word problems and logical deduction.",
+  "definitionCn": "思维链（CoT）提示鼓励大语言模型在给出最终答案前显式表达其中间推理步骤。这显著提升了数学应用题和逻辑推理等复杂多步骤推理任务的性能。",
+  "tags": ["Prompting", "Reasoning", "LLM"], "updated": "2026-03-19"
+}

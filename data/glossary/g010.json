@@ -1,0 +1,6 @@
+{
+  "id": "g010", "term": "Diffusion Model", "termCn": "扩散模型",
+  "definition": "Diffusion models are a class of generative models that learn to create data by reversing a gradual noising process. They have achieved state-of-the-art results in image, audio, and video generation, powering tools like DALL-E, Stable Diffusion, and Sora.",
+  "definitionCn": "扩散模型是一类生成模型，通过学习逆转渐进式噪声过程来生成数据。它们在图像、音频和视频生成任务上达到了最优效果，支撑着DALL-E、Stable Diffusion和Sora等工具。",
+  "tags": ["Generation", "CV", "GenAI"], "updated": "2026-03-19"
+}

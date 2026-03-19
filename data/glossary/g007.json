@@ -1,0 +1,6 @@
+{
+  "id": "g007", "term": "Context Window", "termCn": "上下文窗口",
+  "definition": "The context window is the maximum number of tokens an LLM can process in a single forward pass. A larger context window enables the model to consider more prior conversation and documents, critical for long-document tasks.",
+  "definitionCn": "上下文窗口是大语言模型在单次前向传播中可以处理的最大token数。更大的上下文窗口使模型能够考虑更多的先前对话和文档，对长文档任务至关重要。",
+  "tags": ["LLM", "Architecture"], "updated": "2026-03-19"
+}
