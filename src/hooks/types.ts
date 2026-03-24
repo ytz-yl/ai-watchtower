@@ -33,4 +33,8 @@ export interface GlossaryItem {
   definitionCn: string
   tags: string[]
   updated: string
+  content?: string
+  author?: string
+  sourceUrl?: string
+  readingTime?: number
 }

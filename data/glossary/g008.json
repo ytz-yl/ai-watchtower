@@ -1,6 +1,0 @@
-{
-  "id": "g008", "term": "Fine-tuning", "termCn": "微调",
-  "definition": "Fine-tuning is the process of taking a pre-trained model and continuing to train it on a specific domain or task dataset. Unlike pre-training from scratch, fine-tuning starts with an already capable model and adapts it to a target use case efficiently.",
-  "definitionCn": "微调是指将预训练模型在特定领域或任务的dataset上继续训练。与从零开始预训练不同，微调从一个已有能力的模型出发，高效地将其适应至目标用例。",
-  "tags": ["Training", "LLM"], "updated": "2026-03-19"
-}

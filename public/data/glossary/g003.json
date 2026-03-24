@@ -1,6 +1,0 @@
-{
-  "id": "g003", "term": "MoE", "termCn": "混合专家模型",
-  "definition": "Mixture of Experts (MoE) is a neural network architecture that activates only a subset of 'expert' networks per input. While total parameters can reach trillions, only a small fraction (e.g., 37B) are active per token, enabling massive scale with manageable compute.",
-  "definitionCn": "混合专家模型（MoE）是一种神经网络架构，对每个输入只激活部分\"专家\"网络。虽然参数量可达万亿级，但每个token只激活少量参数（如370亿），实现了在可控计算量下的超大模型规模。",
-  "tags": ["Architecture", "Efficiency", "LLM"], "updated": "2026-03-19"
-}
