@@ -1,66 +1,108 @@
 ---
 name: ai-news-collector
-description: 搜索今日 AI 科技新闻，摘录并录入 ai-watchtower 数据库。当用户说"抓新闻"、"更新今日快讯"、"采集AI新闻"、"更新news"时触发此技能。
+description: 抓取今日 AI 新闻，仔细评估筛选最有价值的条目后录入数据库。当用户说"抓新闻"、"更新今日快讯"、"采集AI新闻"、"更新news"时触发此技能。
 ---
 
 # AI News Collector
 
 ## 工作流程
 
-1. 用 `batch_web_search` 搜索今日 AI 新闻（查询今日日期 + AI/大模型/大模型最新进展）
-2. 对每条新闻用 `extract_content_from_websites` 抓取正文
-3. 整理成结构化数据
-4. 执行写入脚本
-
-## 搜索策略
-
-```json
-[
-  {"query": "AI 大模型 最新进展 今日 DATE", "data_range": "d"},
-  {"query": "人工智能 突破性进展 DATE", "data_range": "d"},
-  {"query": "LLM GPT Claude Gemini 最新消息 DATE", "data_range": "d"},
-  {"query": "AI 产品发布 最新 DATE", "data_range": "d"}
-]
+```
+抓取专业媒体今日新闻
+    ↓
+评估每条新闻的价值
+    ↓
+只选最有价值的写入数据库
+    ↓
+通知用户
 ```
 
-DATE 替换为今天日期，格式 `2026年3月24日`。
+---
 
-每条新闻选取 5~8 条最有价值的。
+## 第一步：抓取专业媒体
 
-## 新闻数据格式
+直接抓首页，过滤带今日时间戳的文章：
 
+| 媒体 | 网址 | 特点 |
+|------|------|------|
+| **量子位** | `https://www.qbitai.com/` | AI垂直，今日内容多，需过滤时间戳 |
+| **新智元/智源** | `https://link.baai.ac.cn/` | AI垂直，质量高 |
+| **机器之心 RSS** | `https://feeds.feedburner.com/jiqizhixin` | 反爬友好，时间精确 |
+
+使用 `extract_content_from_websites` 抓取每个媒体的今日新闻列表页，取前 10~15 条。
+
+---
+
+## 第二步：评估筛选（核心步骤）
+
+**只选真正有价值的写入**，宁缺毋滥。每条新闻从以下四个维度打分：
+
+| 维度 | 权重 | 评估内容 |
+|------|------|---------|
+| 🔴 **突破性** | 30% | 是否有重大技术/产品突破？ |
+| 🟡 **时效性** | 20% | 是否今天刚发？独家？ |
+| 🟢 **覆盖度** | 30% | 与 LLM/AI 前沿相关度高？ |
+| 🔵 **实用性** | 20% | 从业者关心、有参考价值？ |
+
+**总分 ≥ 7/10 才写入数据库**，不足的不入库（宁可少，不要滥）。
+
+**以下情况直接排除：**
+- 产品测评/广告/PR稿（明显软文）
+- 股市/财经分析（不是AI技术）
+- 二手报道（多家媒体转发的同一件事只选最源头的一篇）
+- 与AI/LLM/ML无关的新闻
+
+---
+
+## 第三步：写入数据库
+
+从评估通过的条目中选 **5~8 条最有价值的**，写入 `news` 表。
+
+每条数据格式：
 ```json
 {
-  "id": "news-YYYYMMDD-001",
-  "title": "英文标题",
+  "id": "news-20260324-001",
+  "title": "英文标题或无标题时用中文",
   "titleCn": "中文标题",
-  "source": "The Verge / 机器之心 等",
-  "sourceUrl": "https://...",
+  "source": "量子位",
+  "sourceUrl": "https://www.qbitai.com/...",
   "publishedAt": "2026-03-24",
-  "summary": "英文摘要 1-2句",
-  "summaryCn": "中文摘要 1-2句",
+  "summary": "英文摘要，1-2句",
+  "summaryCn": "中文摘要，1-2句",
   "tags": ["LLM", "产品发布"],
   "featured": 1
 }
 ```
 
-## 写入命令
-
+写入命令：
 ```bash
-python3 /workspace/skills/ai-news-collector/scripts/collect-news.py \
-  '{"title":"...","titleCn":"...","source":"...","sourceUrl":"...","summary":"...","summaryCn":"...","tags":["AI"],"publishedAt":"2026-03-24","featured":0}'
+python3 skills/ai-news-collector/collect-news.py --items \
+  '[{"title":"...","titleCn":"...","source":"量子位","sourceUrl":"...","publishedAt":"2026-03-24","summary":"...","summaryCn":"...","tags":["LLM"],"featured":0}]'
 ```
 
-或批量写入（多条新闻用 Python 脚本读取 stdin）：
+---
 
-```bash
-python3 /workspace/skills/ai-news-collector/scripts/collect-news.py --items \
-  '[{"title":"...","titleCn":"...","source":"...","sourceUrl":"...","summary":"...","summaryCn":"...","tags":["AI"],"featured":0},...]'
+## 评估示例
+
 ```
+新闻：OpenAI 发布 GPT-5，数学推理超人类
+→ 突破性5 + 时效性5 + 覆盖度5 + 实用性5 = 20/20 → 写入 ✅
+
+新闻：某公司融资1亿美元做AI
+→ 突破性2 + 时效性3 + 覆盖度3 + 实用性2 = 10/20 → 不写入 ❌（财经非技术）
+
+新闻：LeCun 谈 AGI 实现路径
+→ 突破性3 + 时效性3 + 覆盖度5 + 实用性4 = 15/20 → 写入 ✅
+
+新闻：某AI产品接入微信
+→ 突破性1 + 时效性2 + 覆盖度3 + 实用性3 = 9/20 → 不写入 ❌
+```
+
+---
 
 ## 完成后
 
 通知用户：
-- 本次采集数量
-- 主要内容摘要（2~3条亮点）
-- 写入的日期
+- 本次抓取来源媒体数量
+- 通过评估的新闻数量（没达到5条也要如实报告）
+- 每条新闻的标题 + 来源 + 一句话说明价值
