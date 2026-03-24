@@ -3,13 +3,16 @@ import Home from './pages/Home'
 import Papers from './pages/Papers'
 import Glossary from './pages/Glossary'
 import GlossaryDetail from './pages/GlossaryDetail'
+import Knowledge from './pages/Knowledge'
+import ArticleDetail from './pages/ArticleDetail'
 
 function Navbar() {
   const location = useLocation()
   const links = [
     { to: '/', label: '📰 AI快讯', key: 'home' },
     { to: '/papers', label: '📄 今日论文', key: 'papers' },
-    { to: '/glossary', label: '🧠 知识库', key: 'glossary' },
+    { to: '/knowledge', label: '🧠 技术博客', key: 'knowledge' },
+    { to: '/glossary', label: '📖 术语表', key: 'glossary' },
   ]
   return (
     <nav className="bg-surface-light border-b border-white/10 sticky top-0 z-50 backdrop-blur-md">
@@ -51,13 +54,14 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/papers" element={<Papers />} />
+            <Route path="/knowledge" element={<Knowledge />} />
+            <Route path="/article/:id" element={<ArticleDetail />} />
             <Route path="/glossary" element={<Glossary />} />
             <Route path="/glossary/:id" element={<GlossaryDetail />} />
           </Routes>
         </main>
         <footer className="text-center text-gray-600 text-xs py-6 border-t border-white/5">
-          AI前沿瞭望台 · 数据每日自动更新 ·{" "}
-          <span id="last-updated" className="text-gray-500">加载中…</span>
+          AI前沿瞭望台 · 数据每日自动更新 · 技术博客由 SQLite + 本地图片存储驱动
         </footer>
       </div>
     </BrowserRouter>
