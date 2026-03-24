@@ -1,6 +1,0 @@
-{
-  "id": "g002", "term": "RAG", "termCn": "检索增强生成",
-  "definition": "Retrieval-Augmented Generation (RAG) combines a language model with a retrieval system, allowing the model to ground its responses in external documents for more accurate and up-to-date answers. RAG reduces hallucinations and enables knowledge-intensive tasks without fine-tuning.",
-  "definitionCn": "检索增强生成（RAG）将语言模型与检索系统相结合，使模型能够基于外部文档来生成回答，从而获得更准确、更及时的结果。RAG减少幻觉，使知识密集型任务无需微调即可完成。",
-  "tags": ["LLM", "Knowledge", "Retrieval"], "updated": "2026-03-19"
-}

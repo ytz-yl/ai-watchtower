@@ -1,6 +1,0 @@
-{
-  "id": "g001", "term": "RLHF", "termCn": "基于人类反馈的强化学习",
-  "definition": "Reinforcement Learning from Human Feedback (RLHF) is a training paradigm that fine-tunes a language model using human preference data to align model outputs with human values and intentions. It typically involves training a reward model from human rankings, then fine-tuning the LLM with reinforcement learning.",
-  "definitionCn": "基于人类反馈的强化学习（RLHF）是一种训练范式，通过人类偏好数据对语言模型进行微调，使模型输出与人类价值观和意图保持一致。它通常包括从人类排序中训练奖励模型，然后用强化学习微调LLM。",
-  "tags": ["LLM", "Alignment", "Training"], "updated": "2026-03-19"
-}

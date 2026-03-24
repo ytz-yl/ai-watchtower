@@ -53,9 +53,18 @@ async function initDb() {
         term TEXT NOT NULL, term_cn TEXT NOT NULL,
         definition TEXT NOT NULL, definition_cn TEXT NOT NULL,
         tags TEXT NOT NULL, updated TEXT NOT NULL,
+        content TEXT NOT NULL DEFAULT '',
+        author TEXT NOT NULL DEFAULT '',
+        source_url TEXT NOT NULL DEFAULT '',
+        reading_time INTEGER NOT NULL DEFAULT 3,
         created_at TEXT DEFAULT (datetime('now'))
       )
     `)
+    // 迁移旧数据：新增字段
+    try { db.run(`ALTER TABLE glossary ADD COLUMN content TEXT NOT NULL DEFAULT ''`) } catch (_) {}
+    try { db.run(`ALTER TABLE glossary ADD COLUMN author TEXT NOT NULL DEFAULT ''`) } catch (_) {}
+    try { db.run(`ALTER TABLE glossary ADD COLUMN source_url TEXT NOT NULL DEFAULT ''`) } catch (_) {}
+    try { db.run(`ALTER TABLE glossary ADD COLUMN reading_time INTEGER NOT NULL DEFAULT 3`) } catch (_) {}
     saveDb()
     console.log('[db] Created new database')
   }
@@ -89,8 +98,13 @@ function newsToObj(r) {
 function glossaryToObj(r) {
   return {
     id: r.id, term: r.term, termCn: r.term_cn,
-    definition: r.definition, definitionCn: r.definition_cn,
-    tags: JSON.parse(r.tags), updated: r.updated,
+    definition: r.definition || '', definitionCn: r.definition_cn || '',
+    tags: (() => { try { return JSON.parse(r.tags) } catch { return [] } })(),
+    updated: r.updated || '',
+    content: r.content || '',
+    author: r.author || '',
+    sourceUrl: r.source_url || '',
+    readingTime: r.reading_time || 3,
   }
 }
 
@@ -192,10 +206,26 @@ async function main() {
     try {
       const rows = db.exec('SELECT * FROM glossary ORDER BY term ASC')
       if (!rows.length) return res.json([])
-      const items = rows[0].values.map(([id,term,term_cn,definition,definition_cn,tags,updated]) =>
-        glossaryToObj({ id, term, term_cn, definition, definition_cn, tags, updated })
-      )
+      const cols = rows[0].columns
+      const items = rows[0].values.map(row => {
+        const obj = {}
+        cols.forEach((c, i) => { obj[c] = row[i] })
+        return glossaryToObj(obj)
+      })
       res.json(items)
+    } catch (e) {
+      res.status(500).json({ error: e.message })
+    }
+  })
+
+  app.get('/api/glossary/:id', (req, res) => {
+    try {
+      const rows = db.exec('SELECT * FROM glossary WHERE id = ?', [req.params.id])
+      if (!rows.length || !rows[0].values.length) return res.status(404).json({ error: 'Not found' })
+      const cols = rows[0].columns
+      const obj = {}
+      rows[0].values[0].forEach((v, i) => { obj[cols[i]] = v })
+      res.json(glossaryToObj(obj))
     } catch (e) {
       res.status(500).json({ error: e.message })
     }
@@ -205,8 +235,8 @@ async function main() {
     try {
       const item = req.body
       if (!item.id || !item.term) return res.status(400).json({ error: 'id and term required' })
-      db.run('INSERT OR REPLACE INTO glossary (id,term,term_cn,definition,definition_cn,tags,updated) VALUES (?,?,?,?,?,?,?)',
-        [item.id, item.term, item.termCn, item.definition, item.definitionCn, JSON.stringify(item.tags || []), item.updated || new Date().toISOString().split('T')[0]])
+      db.run('INSERT OR REPLACE INTO glossary (id,term,term_cn,definition,definition_cn,tags,updated,content,author,source_url,reading_time) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+        [item.id, item.term, item.termCn, item.definition, item.definitionCn, JSON.stringify(item.tags||[]), item.updated||'', item.content||'', item.author||'', item.sourceUrl||'', item.readingTime||3])
       saveDb()
       res.json({ ok: true })
     } catch (e) {

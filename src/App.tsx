@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import Home from './pages/Home'
 import Papers from './pages/Papers'
 import Glossary from './pages/Glossary'
+import GlossaryDetail from './pages/GlossaryDetail'
 
 function Navbar() {
   const location = useLocation()
@@ -51,6 +52,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/papers" element={<Papers />} />
             <Route path="/glossary" element={<Glossary />} />
+            <Route path="/glossary/:id" element={<GlossaryDetail />} />
           </Routes>
         </main>
         <footer className="text-center text-gray-600 text-xs py-6 border-t border-white/5">

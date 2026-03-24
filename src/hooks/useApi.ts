@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Paper } from './types'
+import type { Paper, GlossaryItem } from './types'
 
 const API = import.meta.env.VITE_API_URL || ''
 
@@ -34,7 +34,7 @@ export function useNews() {
 }
 
 export function useGlossary() {
-  const [items, setItems] = useState<any[]>([])
+  const [items, setItems] = useState<GlossaryItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
