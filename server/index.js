@@ -391,28 +391,6 @@ async function main() {
     }
   })
 
-  // ── Glossary API（简版，兼容旧前端）────────────────────────
-  app.get('/api/glossary', (req, res) => {
-    try {
-      const result = db.exec("SELECT id,title,title_cn,excerpt,category,difficulty,tags,reading_time,status,featured,published,created_at FROM articles WHERE category='术语表' AND status='published' ORDER BY title ASC")
-      if (!result.length) return res.json([])
-      const cols = result[0].columns
-      res.json(result[0].values.map(row => {
-        const obj = {}
-        cols.forEach((c, i) => { obj[c] = row[i] })
-        return {
-          id: obj.id, term: obj.title, termCn: obj.title_cn || obj.title,
-          definition: obj.excerpt || '', definitionCn: obj.excerpt || '',
-          tags: safeJson(obj.tags, []), updated: (obj.published||'').substring(0,10),
-          content: obj.excerpt || '',
-          readingTime: obj.reading_time || 5,
-        }
-      }))
-    } catch (e) {
-      res.status(500).json({ error: e.message })
-    }
-  })
-
   // ── 静态文件服务 ────────────────────────────────────────────
   // 上传的图片
   app.use('/uploads', express.static(UPLOADS_DIR))

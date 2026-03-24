@@ -1,18 +1,15 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import Papers from './pages/Papers'
-import Glossary from './pages/Glossary'
-import GlossaryDetail from './pages/GlossaryDetail'
 import Knowledge from './pages/Knowledge'
 import ArticleDetail from './pages/ArticleDetail'
 
 function Navbar() {
   const location = useLocation()
   const links = [
-    { to: '/', label: '📰 AI快讯', key: 'home' },
-    { to: '/papers', label: '📄 今日论文', key: 'papers' },
+    { to: '/',          label: '📰 AI快讯',   key: 'home' },
+    { to: '/papers',    label: '📄 今日论文',  key: 'papers' },
     { to: '/knowledge', label: '🧠 技术博客', key: 'knowledge' },
-    { to: '/glossary', label: '📖 术语表', key: 'glossary' },
   ]
   return (
     <nav className="bg-surface-light border-b border-white/10 sticky top-0 z-50 backdrop-blur-md">
@@ -27,7 +24,9 @@ function Navbar() {
                 key={l.key}
                 to={l.to}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  location.pathname === l.to
+                  l.to !== '/' && location.pathname.startsWith(l.to)
+                    ? 'bg-primary/20 text-primary-light'
+                    : location.pathname === l.to
                     ? 'bg-primary/20 text-primary-light'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
@@ -56,8 +55,6 @@ export default function App() {
             <Route path="/papers" element={<Papers />} />
             <Route path="/knowledge" element={<Knowledge />} />
             <Route path="/article/:id" element={<ArticleDetail />} />
-            <Route path="/glossary" element={<Glossary />} />
-            <Route path="/glossary/:id" element={<GlossaryDetail />} />
           </Routes>
         </main>
         <footer className="text-center text-gray-600 text-xs py-6 border-t border-white/5">
