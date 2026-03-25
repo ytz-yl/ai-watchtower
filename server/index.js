@@ -320,9 +320,14 @@ async function main() {
       const items = result[0].values.map(row => {
         const obj = {}
         cols.forEach((c, i) => { obj[c] = row[i] })
+        // 修复 authors 字段：确保始终返回数组
+        let authors = safeJson(obj.authors, [])
+        if (typeof authors === 'number' || !Array.isArray(authors)) {
+          authors = []
+        }
         return {
           id: obj.id, title: obj.title, titleCn: obj.title_cn,
-          authors: safeJson(obj.authors, []),
+          authors,
           abstract: obj.abstract||'', abstractCn: obj.abstract_cn||'',
           category: obj.category||'cs.AI',
           tags: safeJson(obj.tags, []),

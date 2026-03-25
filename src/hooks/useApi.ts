@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { Paper, GlossaryItem } from './types'
 
-const API = import.meta.env.VITE_API_URL || ''
+const API = ''
 
 export function usePapers() {
   const [data, setData] = useState<{ meta: any; papers: Paper[] } | null>(null)
