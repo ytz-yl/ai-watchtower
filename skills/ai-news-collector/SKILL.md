@@ -35,7 +35,7 @@ description: 抓取今日 AI 新闻，仔细评估筛选最有价值的条目后
 
 ## 第二步：评估筛选（核心步骤）
 
-**只选真正有价值的写入**，宁缺毋滥。每条新闻从以下四个维度打分：
+**只选真正有价值的写入，宁缺毋滥。** 每条新闻从以下四个维度打分：
 
 | 维度 | 权重 | 评估内容 |
 |------|------|---------|
@@ -44,7 +44,7 @@ description: 抓取今日 AI 新闻，仔细评估筛选最有价值的条目后
 | 🟢 **覆盖度** | 30% | 与 LLM/AI 前沿相关度高？ |
 | 🔵 **实用性** | 20% | 从业者关心、有参考价值？ |
 
-**总分 ≥ 7/10 才写入数据库**，不足的不入库（宁可少，不要滥）。
+**总分 ≥ 7/10 才写入数据库**，不足的不入库。
 
 **以下情况直接排除：**
 - 产品测评/广告/PR稿（明显软文）
@@ -76,7 +76,7 @@ description: 抓取今日 AI 新闻，仔细评估筛选最有价值的条目后
 
 写入命令：
 ```bash
-python3 skills/ai-news-collector/collect-news.py --items \
+python3 /workspace/skills/ai-news-collector/scripts/collect-news.py --items \
   '[{"title":"...","titleCn":"...","source":"量子位","sourceUrl":"...","publishedAt":"2026-03-24","summary":"...","summaryCn":"...","tags":["LLM"],"featured":0}]'
 ```
 
