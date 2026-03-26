@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
-const API = import.meta.env.VITE_API_URL || ''
+const API = ''
 
 const CATEGORY_LABELS: Record<string, string> = {
   '技术解析': '🔬 技术解析',
